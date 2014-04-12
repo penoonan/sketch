@@ -17,11 +17,6 @@ class QueryStringRouterTest extends PHPUnit_Framework_TestCase {
         $this->router = new Router($this->dispatcher, $this->request);
     }
 
-    public function testTrue()
-    {
-        $this->assertTrue(true);
-    }
-
     public function test_it_can_register_a_route()
     {
         $this->router->register('GET', array('foo' => 'bar'), 'baz@buz');
@@ -73,6 +68,16 @@ class QueryStringRouterTest extends PHPUnit_Framework_TestCase {
         $this->dispatcher->shouldReceive('dispatch')->with($request, 'baz@buz')->once()->andReturn('success');
         $result = $router->resolve();
         $this->assertSame($result, 'success');
+    }
+
+    public function test_it_fails_to_resolve_unregistered_route()
+    {
+        $request = $this->makeAFakeRequest('foo=bar', 'GET');
+        $router = new Router($this->dispatcher, $request);
+        $router->get(array('fizz' => 'buzz'), 'baz@buz');
+
+        $result = $router->resolve();
+        $this->assertFalse($result, 'success');
     }
 
     public function test_it_resolves_route_with_int()
