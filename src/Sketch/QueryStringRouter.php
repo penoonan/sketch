@@ -23,26 +23,32 @@ class QueryStringRouter implements RouterInterface {
         $this->request = $request;
     }
 
-    public function register($method, array $params, $controller)
+    public function register($method, $params, $controller)
     {
+        if (is_string($params)) {
+            parse_str(ltrim($params, '?'), $param_array);
+        } else {
+            $param_array = $params;
+        }
+
         array_push($this->routes, array(
             'method' => $method,
-            'params' => $params,
+            'params' => $param_array,
             'controller' => $controller)
         );
     }
 
-    public function get(array $params, $controller)
+    public function get($params, $controller)
     {
         $this->register('GET', $params, $controller);
     }
 
-    public function post(array $params, $controller)
+    public function post($params, $controller)
     {
         $this->register('POST', $params, $controller);
     }
 
-    public function any(array $params, $controller)
+    public function any($params, $controller)
     {
         $this->register('GET', $params, $controller);
         $this->register('POST', $params, $controller);
@@ -84,6 +90,13 @@ class QueryStringRouter implements RouterInterface {
         if ($route_param_value === '{int}' && ctype_digit($request_value)) return true;
 
         return $request_value === $route_param_value;
+    }
+
+    protected function convertParamStringToArray($params)
+    {
+        $params = ltrim($params, '?');
+        $param_array = explode('&', ltrim($params, '?'));
+
     }
 
 } 

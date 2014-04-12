@@ -26,7 +26,24 @@ class QueryStringRouterTest extends PHPUnit_Framework_TestCase {
     public function test_it_can_register_a_route()
     {
         $this->router->register('GET', array('foo' => 'bar'), 'baz@buz');
-        $this->assertEquals($this->router->routes, array(array('method' => 'GET', 'params' => array('foo' => 'bar'), 'controller' => 'baz@buz')));
+        $this->assertEquals($this->router->routes, array($this->getStandardRoute()));
+    }
+
+    public function test_it_can_register_a_route_based_on_a_query_string()
+    {
+        $this->router->register('GET', 'foo=bar', 'baz@buz');
+        $this->assertEquals($this->router->routes, array($this->getStandardRoute()));
+    }
+
+    public function test_it_can_register_query_string_route_with_multiple_params()
+    {
+        $this->router->get('foo=bar&baz=buz', 'baz@buz');
+        $this->assertEquals($this->router->routes, array(
+            array(
+                'method' => 'GET',
+                'params' => array('foo' => 'bar', 'baz' => 'buz'),
+                'controller' => 'baz@buz'
+        )));
     }
 
     public function test_it_can_register_a_get_route()
@@ -64,6 +81,17 @@ class QueryStringRouterTest extends PHPUnit_Framework_TestCase {
         $request = $this->makeAFakeRequest('foo=1', 'GET');
         $router = new Router($this->dispatcher, $request);
         $router->get(array('foo' => '{int}'), 'baz@buz');
+
+        $this->dispatcher->shouldReceive('dispatch')->with($request, 'baz@buz')->once()->andReturn('success');
+        $result = $router->resolve();
+        $this->assertSame($result, 'success');
+    }
+
+    public function test_it_resolves_query_string_route_with_int()
+    {
+        $request = $this->makeAFakeRequest('foo=1', 'GET');
+        $router = new Router($this->dispatcher, $request);
+        $router->get('foo={int}', 'baz@buz');
 
         $this->dispatcher->shouldReceive('dispatch')->with($request, 'baz@buz')->once()->andReturn('success');
         $result = $router->resolve();
