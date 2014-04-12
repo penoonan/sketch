@@ -1,0 +1,30 @@
+{
+    "name": "sketch/sketch",
+    "description": "The Sketch Wordpress App Framework",
+    "keywords": ["MVC","Wordpress"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Patrick Noonan",
+            "email": "pnoonan@arcstone.com",
+            "homepage": "http://github.com/pnoonan",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Sketch\\": "src/Sketch"
+        }
+    },
+    "require": {
+        "php": ">=5.4.0",
+        "symfony/http-foundation": "2.3.*@dev",
+        "illuminate/container": "4.1.*@dev",
+        "league/plates": "dev-master",
+        "vlucas/valitron": "dev-master"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.0.*",
+        "mockery/mockery": "dev-master"
+    }
+}
