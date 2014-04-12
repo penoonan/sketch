@@ -27,9 +27,6 @@ abstract class WpBaseMenuAbstract {
         $position = null,
         $parent_slug;
 
-    public $base_dir = ARCSTONE_SKETCH_BASE_DIR;
-    public $base_uri = ARCSTONE_SKETCH_BASE_URI;
-
     public function __construct(WpApiWrapper $wp, RouterInterface $router)
     {
         $this->wp = $wp;

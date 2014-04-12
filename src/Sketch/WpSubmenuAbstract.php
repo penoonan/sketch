@@ -11,9 +11,8 @@ abstract class WpSubmenuAbstract extends WpBaseMenuAbstract {
         $capability = "edit_themes",
         $menu_slug  = "submenu_slug";
 
-    public function addMenu($parent = null)
+    public function addMenu()
     {
-        if ($parent) $this->parent_slug = $parent;
         $this->wp->add_submenu_page(
           $this->parent_slug,
           $this->page_title,
