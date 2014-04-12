@@ -44,6 +44,10 @@ class Dispatcher {
 
     public function dispatch(Request $request, $controller)
     {
+        if (is_callable($controller)) {
+            return $controller();
+        }
+
         list($class, $method) = explode('@', $controller);
         $class = ucwords($class) . 'Controller';
         return call_user_func(array($this->controller($class, $request), $method));

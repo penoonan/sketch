@@ -36,4 +36,28 @@ class DispatcherTest extends PHPUnit_Framework_TestCase{
         $this->assertSame($result, 'foo');
     }
 
+    public function test_it_can_dispatch_a_callback()
+    {
+        $request = Request::create('abc.com', 'GET');
+        $callback = function() {
+            return 'foo';
+        };
+
+        $result = $this->dispatcher->dispatch($request, $callback);
+
+        $this->assertSame($result, 'foo');
+    }
+
+    public function test_it_can_dispatch_a_callback_using_use()
+    {
+        $request = Request::create('abc.com', 'GET');
+        $callback = function() use($request) {
+            return $request->getMethod();
+        };
+
+        $result = $this->dispatcher->dispatch($request, $callback);
+
+        $this->assertSame($result, 'GET');
+    }
+
 } 

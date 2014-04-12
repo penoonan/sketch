@@ -80,6 +80,18 @@ class QueryStringRouterTest extends PHPUnit_Framework_TestCase {
         $this->assertFalse($result, 'success');
     }
 
+    public function test_it_passes_callbacks_to_dispatcher()
+    {
+        $request = $this->makeAFakeRequest('fizz=buzz', 'GET');
+        $router = new Router($this->dispatcher, $request);
+        $callback = function() { return 'foo'; };
+        $router->get(array('fizz' => 'buzz'), $callback);
+
+        $this->dispatcher->shouldReceive('dispatch')->with($request, $callback)->once()->andReturn('callback_passed_to_dispatcher');
+        $result = $router->resolve();
+        $this->assertSame($result, 'callback_passed_to_dispatcher');
+    }
+
     public function test_it_resolves_route_with_int()
     {
         $request = $this->makeAFakeRequest('foo=1', 'GET');
