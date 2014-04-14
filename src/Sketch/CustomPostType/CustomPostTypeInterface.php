@@ -1,7 +1,7 @@
 <?php
 
 namespace Sketch\CustomPostType;
-use Sketch\Metabox\CustomPostMetaboxInterface as Metabox;
+use Sketch\Metabox\MetaboxInterface as Metabox;
 
 interface CustomPostTypeInterface {
     public function register();
