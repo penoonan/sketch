@@ -1,6 +1,6 @@
 #Sketch Framework
 
-This is the Sketch Wordpress Application framework. To learn more about sketch and find a sample / suggested Wordpress application architecture, visit the [Sketch App](https://www.github.com/pnoonan/sketch) repository.
+This is the Sketch Wordpress Application framework. To learn more about sketch and find a sample / suggested Wordpress application architecture, visit the [Sketch App](https://www.github.com/sketchwp/sketch) repository.
 
 ###Installation
 
