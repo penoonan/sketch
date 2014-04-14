@@ -132,6 +132,8 @@ abstract class BaseCustomPostType implements CustomPostTypeInterface {
     {
         array_push($this->metaboxes, $metabox);
         $this->register_meta_box_cb = array($this, 'metaboxCallback');
+
+        return $this;
     }
 
     public function metaboxCallback($post)
