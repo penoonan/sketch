@@ -57,14 +57,14 @@ class Dispatcher {
 
         list($class, $method) = explode('@', $controller);
         $class = ucwords($class) . 'Controller';
-        return call_user_func_array(array($this->controller($class, $this->request), $method), $args);
+        return call_user_func_array(array($this->controller($class), $method), $args);
     }
 
-    private function controller($class, $request)
+    private function controller($class)
     {
         $controller_class = $this->app->make($this->controller_namespace . '\\' . $class);
         $controller_class->setTemplate($this->template);
-        $controller_class->setRequest($request);
+        $controller_class->setRequest($this->request);
         return $controller_class;
     }
 
