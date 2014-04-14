@@ -68,7 +68,7 @@ class QueryStringRouter implements RouterInterface {
                     }
                     $i++;
                     if ($i === count($route['params'])){
-                        return $this->dispatch($this->request, $route['controller']);
+                        return $this->dispatch($route['controller']);
                     }
                 }
             }
@@ -76,9 +76,9 @@ class QueryStringRouter implements RouterInterface {
         return false;
     }
 
-    protected function dispatch(Request $request, $controller)
+    protected function dispatch($controller)
     {
-        return $this->dispatcher->dispatch($request, $controller);
+        return $this->dispatcher->dispatch($controller);
     }
     
     protected function matches($request_params, $route_param_name, $route_param_value)

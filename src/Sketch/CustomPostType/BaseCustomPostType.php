@@ -5,7 +5,7 @@ namespace Sketch\CustomPostType;
 use Sketch\WpApiWrapper;
 use Sketch\Metabox\CustomPostMetaboxInterface as Metabox;
 
-abstract class BaseCustomPostType {
+abstract class BaseCustomPostType implements CustomPostTypeInterface {
 
     protected
         $post_type = "custom_post_type",
@@ -35,6 +35,7 @@ abstract class BaseCustomPostType {
         $label,
         
         //Labels
+        $labels,
         $name,
         $singular_name,
         $menu_name,
@@ -79,7 +80,6 @@ abstract class BaseCustomPostType {
             'taxonomies',
             'has_archive',
             'permalink_epmask',
-            'rewrite',
             'query_var',
             'can_export',
             'label',

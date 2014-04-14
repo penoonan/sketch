@@ -19,6 +19,11 @@ class Dispatcher {
     private $template;
 
     /**
+     * @var \Symfony\Component\HttpFoundation\Request
+     */
+    private $request;
+
+    /**
      * If you choose to namespace your controllers,
      * pass that namespace in as a parameter to this class
      * in app.php
@@ -31,26 +36,28 @@ class Dispatcher {
     /**
      * @param Container $app
      * @param Template $template
+     * @param Request $request
      * @param null $controller_namespace
      */
-    public function __construct(Container $app, Template $template, $controller_namespace = null)
+    public function __construct(Container $app, Template $template, Request $request, $controller_namespace = null)
     {
         if ($controller_namespace) {
             $this->controller_namespace = trim($controller_namespace, '\\');
         }
         $this->app = $app;
         $this->template = $template;
+        $this->request = $request;
     }
 
-    public function dispatch(Request $request, $controller)
+    public function dispatch($controller, array $args = array())
     {
         if (is_callable($controller)) {
-            return $controller();
+            return call_user_func_array($controller, $args);
         }
 
         list($class, $method) = explode('@', $controller);
         $class = ucwords($class) . 'Controller';
-        return call_user_func(array($this->controller($class, $request), $method));
+        return call_user_func_array(array($this->controller($class, $this->request), $method), $args);
     }
 
     private function controller($class, $request)

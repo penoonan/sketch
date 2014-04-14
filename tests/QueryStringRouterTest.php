@@ -65,7 +65,7 @@ class QueryStringRouterTest extends PHPUnit_Framework_TestCase {
         $router = new Router($this->dispatcher, $request);
         $router->get(array('foo' => 'bar'), 'baz@buz');
 
-        $this->dispatcher->shouldReceive('dispatch')->with($request, 'baz@buz')->once()->andReturn('success');
+        $this->dispatcher->shouldReceive('dispatch')->with('baz@buz')->once()->andReturn('success');
         $result = $router->resolve();
         $this->assertSame($result, 'success');
     }
@@ -87,7 +87,7 @@ class QueryStringRouterTest extends PHPUnit_Framework_TestCase {
         $callback = function() { return 'foo'; };
         $router->get(array('fizz' => 'buzz'), $callback);
 
-        $this->dispatcher->shouldReceive('dispatch')->with($request, $callback)->once()->andReturn('callback_passed_to_dispatcher');
+        $this->dispatcher->shouldReceive('dispatch')->with($callback)->once()->andReturn('callback_passed_to_dispatcher');
         $result = $router->resolve();
         $this->assertSame($result, 'callback_passed_to_dispatcher');
     }
@@ -98,7 +98,7 @@ class QueryStringRouterTest extends PHPUnit_Framework_TestCase {
         $router = new Router($this->dispatcher, $request);
         $router->get(array('foo' => '{int}'), 'baz@buz');
 
-        $this->dispatcher->shouldReceive('dispatch')->with($request, 'baz@buz')->once()->andReturn('success');
+        $this->dispatcher->shouldReceive('dispatch')->with('baz@buz')->once()->andReturn('success');
         $result = $router->resolve();
         $this->assertSame($result, 'success');
     }
@@ -109,7 +109,7 @@ class QueryStringRouterTest extends PHPUnit_Framework_TestCase {
         $router = new Router($this->dispatcher, $request);
         $router->get('foo={int}', 'baz@buz');
 
-        $this->dispatcher->shouldReceive('dispatch')->with($request, 'baz@buz')->once()->andReturn('success');
+        $this->dispatcher->shouldReceive('dispatch')->with('baz@buz')->once()->andReturn('success');
         $result = $router->resolve();
         $this->assertSame($result, 'success');
     }
@@ -121,7 +121,7 @@ class QueryStringRouterTest extends PHPUnit_Framework_TestCase {
         $router->get(array('foo' => 'bar'), 'baz@get');
         $router->post(array('foo' => 'bar'), 'baz@post');
 
-        $this->dispatcher->shouldReceive('dispatch')->with($request, 'baz@get')->once()->andReturn('success');
+        $this->dispatcher->shouldReceive('dispatch')->with('baz@get')->once()->andReturn('success');
         $result = $router->resolve();
         $this->assertSame($result, 'success');
     }
@@ -133,7 +133,7 @@ class QueryStringRouterTest extends PHPUnit_Framework_TestCase {
         $router->get(array('foo' => 'bar', 'baz' => 'buz'), 'baz@most_specific');
         $router->get(array('foo' => 'bar'), 'baz@least_specific');
 
-        $this->dispatcher->shouldReceive('dispatch')->with($request, 'baz@least_specific')->once()->andReturn('success');
+        $this->dispatcher->shouldReceive('dispatch')->with('baz@least_specific')->once()->andReturn('success');
         $result = $router->resolve();
         $this->assertSame($result, 'success');
     }
@@ -145,7 +145,7 @@ class QueryStringRouterTest extends PHPUnit_Framework_TestCase {
         $router->get(array('foo' => 'bar', 'baz' => 'buz'), 'baz@most_specific');
         $router->get(array('foo' => 'bar'), 'baz@least_specific');
 
-        $this->dispatcher->shouldReceive('dispatch')->with($request, 'baz@most_specific')->once()->andReturn('success');
+        $this->dispatcher->shouldReceive('dispatch')->with('baz@most_specific')->once()->andReturn('success');
         $result = $router->resolve();
         $this->assertSame($result, 'success');
     }
