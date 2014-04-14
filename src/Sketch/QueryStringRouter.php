@@ -23,7 +23,7 @@ class QueryStringRouter implements RouterInterface {
         $this->request = $request;
     }
 
-    public function register($method, $params, $controller)
+    public function register($method, $params, $controller, $script = 'admin')
     {
         if (is_string($params)) {
             parse_str(ltrim($params, '?'), $param_array);
@@ -34,33 +34,36 @@ class QueryStringRouter implements RouterInterface {
         array_push($this->routes, array(
             'method' => $method,
             'params' => $param_array,
-            'controller' => $controller)
+            'controller' => $controller,
+            'script' => $script
+          )
         );
     }
 
-    public function get($params, $controller)
+    public function get($params, $controller, $script = 'admin')
     {
-        $this->register('GET', $params, $controller);
+        $this->register('GET', $params, $controller, $script);
     }
 
-    public function post($params, $controller)
+    public function post($params, $controller, $script = 'admin')
     {
-        $this->register('POST', $params, $controller);
+        $this->register('POST', $params, $controller, $script);
     }
 
-    public function any($params, $controller)
+    public function any($params, $controller, $script = 'admin')
     {
-        $this->register('GET', $params, $controller);
-        $this->register('POST', $params, $controller);
+        $this->register('GET', $params, $controller, $script);
+        $this->register('POST', $params, $controller, $script);
     }
 
     public function resolve()
     {
         $params = $this->request->query->all();
         $method = $this->request->getMethod();
+        $script = $this->request->server->get('SCRIPT_NAME');
 
         foreach ($this->routes as $route) {
-            if($method === strtoupper($route['method'])) {
+            if($method === strtoupper($route['method']) && $script === $this->formatScript($route['script'])) {
                 $i = 0;
                 foreach($route['params'] as $k => $v) {
                     if (!$this->matches($params, $k, $v)) {
@@ -96,7 +99,17 @@ class QueryStringRouter implements RouterInterface {
     {
         $params = ltrim($params, '?');
         $param_array = explode('&', ltrim($params, '?'));
+    }
 
+    protected function formatScript($script)
+    {
+        if (FALSE === strpos($script, '/wp-admin/')) {
+            $script = '/wp-admin/' . $script;
+        }
+        if (FALSE === strpos($script, '.php')) {
+            $script .= '.php';
+        }
+        return strtolower($script);
     }
 
 } 

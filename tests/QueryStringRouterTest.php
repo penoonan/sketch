@@ -36,7 +36,8 @@ class QueryStringRouterTest extends PHPUnit_Framework_TestCase {
             array(
                 'method' => 'GET',
                 'params' => array('foo' => 'bar', 'baz' => 'buz'),
-                'controller' => 'baz@buz'
+                'controller' => 'baz@buz',
+                'script' => 'admin'
         )));
     }
 
@@ -57,6 +58,12 @@ class QueryStringRouterTest extends PHPUnit_Framework_TestCase {
         $this->router->any(array('foo' => 'bar'), 'baz@buz');
         $this->assertEquals($this->router->routes, array($this->getStandardRoute(), $this->getStandardRoute('POST')));
 
+    }
+
+    public function test_it_can_register_with_custom_script()
+    {
+        $this->router->post(array('foo' => 'bar'), 'baz@buz', 'edit');
+        $this->assertEquals($this->router->routes, array($this->getStandardRoute('POST', array('foo' => 'bar'), 'baz@buz', 'edit')));
     }
 
     public function test_it_resolves_a_simple_route()
@@ -150,18 +157,19 @@ class QueryStringRouterTest extends PHPUnit_Framework_TestCase {
         $this->assertSame($result, 'success');
     }
 
-    protected function getStandardRoute($method = 'GET')
+    protected function getStandardRoute($method = 'GET', $params = array('foo' => 'bar'), $controller = 'baz@buz', $script = 'admin')
     {
         return array(
             'method' => $method,
-            'params' => array('foo' => 'bar'),
-            'controller' => 'baz@buz'
+            'params' => $params,
+            'controller' => $controller,
+            'script' => $script
         );
     }
 
     protected function makeAFakeRequest($query_string, $method)
     {
-        return Request::create('abc.com?' . $query_string, $method);
+        return Request::create('abc.com?' . $query_string, $method, array(), array(), array(), array('SCRIPT_NAME' => '/wp-admin/admin.php'));
     }
 
 } 
