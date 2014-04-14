@@ -11,14 +11,14 @@ class SketchMetaboxInvalidControllerException extends \InvalidArgumentException 
 class BaseMetabox implements MetaboxInterface {
 
     protected
-        $id = 'metabox-id',
-        $title = 'Metabox',
-        $post_type = 'post',
-        $screen = null,
-        $context = 'advanced',
-        $priority = 'default',
-        $callback_args = array(),
-        $callback_controller = false
+      $id = 'metabox-id',
+      $title = 'Metabox',
+      $post_type = 'post',
+      $screen = null,
+      $context = 'advanced',
+      $priority = 'default',
+      $callback_args = array(),
+      $callback_controller = false
     ;
 
     /**
@@ -44,14 +44,13 @@ class BaseMetabox implements MetaboxInterface {
     {
         $this->validate();
         $this->wp->add_meta_box(
-            $this->id,
-            $this->title,
-            array($this, 'dispatch'),
-            $this->post_type,
-            $this->screen,
-            $this->context,
-            $this->priority,
-            $this->callback_args
+          $this->id,
+          $this->title,
+          array($this, 'dispatch'),
+          $this->screen ?: $this->post_type,
+          $this->context,
+          $this->priority,
+          $this->callback_args
         );
     }
 
@@ -63,8 +62,8 @@ class BaseMetabox implements MetaboxInterface {
     public function dispatch($post, $meta_box)
     {
         $dispatch_args = array($post, $meta_box);
-        if ($callback_args = $this->callbackArgs()) {
-            $dispatch_args[] = $callback_args;
+        if (count($this->callback_args) > 0) {
+            $dispatch_args[] = $this->callback_args;
         }
 
         $this->dispatcher->dispatch($this->callback_controller, $dispatch_args);
