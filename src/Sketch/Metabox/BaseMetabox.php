@@ -17,7 +17,7 @@ class BaseMetabox implements MetaboxInterface {
         $screen = null,
         $context = 'advanced',
         $priority = 'default',
-        $callback_args = null,
+        $callback_args = array(),
         $callback_controller = false
     ;
 
@@ -38,7 +38,6 @@ class BaseMetabox implements MetaboxInterface {
     {
         $this->dispatcher = $dispatcher;
         $this->wp = $wp;
-        $this->wp->add_action('add_meta_boxes', array($this, 'add'));
     }
 
     public function add()
@@ -56,13 +55,24 @@ class BaseMetabox implements MetaboxInterface {
         );
     }
 
-    private function dispatch($post, $meta_box)
+    public function manuallyAddAction()
+    {
+        $this->wp->add_action('add_meta_boxes', array($this, 'add'));
+    }
+
+    public function dispatch($post, $meta_box)
     {
         $dispatch_args = array($post, $meta_box);
-        foreach ($this->callback_args as $arg) {
-            $dispatch_args[] = $arg;
+        if ($callback_args = $this->callbackArgs()) {
+            $dispatch_args[] = $callback_args;
         }
+
         $this->dispatcher->dispatch($this->callback_controller, $dispatch_args);
+    }
+
+    protected function callbackArgs()
+    {
+        return count($this->callback_args > 0) ? $this->callback_args : null;
     }
 
     private function validate()

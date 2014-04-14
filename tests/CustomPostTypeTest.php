@@ -47,7 +47,7 @@ class CustomPostTypeTest extends PHPUnit_Framework_TestCase {
     {
         $this->metabox = m::mock('Sketch\Metabox\CustomPostMetaboxInterface');
         $this->wp->shouldReceive('register_post_type')->with('custom_post_type', array('register_meta_box_cb' => array($this->post_type, 'metaboxCallback')));
-        $this->metabox->shouldReceive('postCallback')->with('post')->once();
+        $this->metabox->shouldReceive('add')->with('post')->once();
         $this->post_type->addMetabox($this->metabox);
         $this->post_type->register();
         $this->post_type->metaboxCallback('post');
