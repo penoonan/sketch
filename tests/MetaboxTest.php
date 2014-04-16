@@ -18,9 +18,10 @@ class MetaboxTest extends PHPUnit_Framework_TestCase {
     public function setUp()
     {
         $this->dispatcher = m::mock('Sketch\Dispatcher');
-        $this->wp = m::mock('Sketch\Wp\WpApiWrapper');
+        $this->wp = $this->get_a_wrapper();
         $this->metabox = new FooMetabox($this->wp, $this->dispatcher);
     }
+
 
     public function test_it_can_manually_add_action()
     {
@@ -41,14 +42,14 @@ class MetaboxTest extends PHPUnit_Framework_TestCase {
      */
     public function test_it_throws_exception_if_controller_incorrectly_formatted()
     {
-        $wp = m::mock('Sketch\Wp\WpApiWrapper');
+        $wp = $this->get_a_wrapper();
         $bar_metabox = new BarMetabox($wp, $this->dispatcher);
         $bar_metabox->add();
     }
 
     public function test_it_can_dispatch_request()
     {
-        $wp = m::mock('Sketch\Wp\WpApiWrapper');
+        $wp = $this->get_a_wrapper();
         $metabox = new BazMetabox($wp, $this->dispatcher);
         $this->dispatcher->shouldReceive('dispatch')->with('foo@bar', array('post', 'metabox'))->once();
         $metabox->dispatch('post', 'metabox');
@@ -56,7 +57,7 @@ class MetaboxTest extends PHPUnit_Framework_TestCase {
 
     public function test_it_can_dispatch_with_callback_args()
     {
-        $wp = m::mock('Sketch\Wp\WpApiWrapper');
+        $wp = $this->get_a_wrapper();
         $metabox = new BuzMetabox($wp, $this->dispatcher);
         $this->dispatcher->shouldReceive('dispatch')->with('foo@bar', array('post', 'metabox', array('foo' => 'bar', 'baz' => 'buz')))->once();
         $metabox->dispatch('post', 'metabox');
@@ -67,9 +68,14 @@ class MetaboxTest extends PHPUnit_Framework_TestCase {
      */
     public function test_call_to_add_throw_exception_if_post_type_not_set()
     {
-        $wp = m::mock('Sketch\Wp\WpApiWrapper');
+        $wp = $this->get_a_wrapper();
         $metabox = new BuzMetabox($wp, $this->dispatcher);
         $metabox->setPostType(null);
+    }
+
+    protected function get_a_wrapper()
+    {
+        return m::mock('Sketch\Wp\WpApiWrapper');
     }
 
 } 
