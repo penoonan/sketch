@@ -1,7 +1,7 @@
 <?php
 use Sketch\CustomPostType\BaseCustomPostType;
 use Mockery as m;
-ini_set('display_errors', -1); error_reporting(E_ALL);
+
 class CustomPostType extends BaseCustomPostType {}
 class FooPostType extends BaseCustomPostType{
     protected
@@ -22,7 +22,7 @@ class CustomPostTypeTest extends PHPUnit_Framework_TestCase {
 
     public function setUp()
     {
-        $this->wp = m::mock('Sketch\WpApiWrapper');
+        $this->wp = m::mock('Sketch\Wp\WpApiWrapper');
         $this->wp->shouldReceive('add_action')->once();
         $this->post_type = new CustomPostType($this->wp);
     }
@@ -35,7 +35,7 @@ class CustomPostTypeTest extends PHPUnit_Framework_TestCase {
 
     public function test_it_can_register_custom_args()
     {
-        $wp = m::mock('Sketch\WpApiWrapper');
+        $wp = m::mock('Sketch\Wp\WpApiWrapper');
         $wp->shouldReceive('add_action')->once();
         $wp->shouldReceive('register_post_type')->with('foo', array('description' => 'foo', 'supports' => 'foo', 'labels' => array('name' => 'foo'), 'rewrite' => array('slug' => 'foo')))->once();
         $post_type = new FooPostType($wp);
