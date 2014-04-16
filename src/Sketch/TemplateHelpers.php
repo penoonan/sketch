@@ -4,6 +4,7 @@ namespace Sketch;
 
 
 use League\Plates\Extension\ExtensionInterface;
+use Sketch\Wp\WpApiWrapper;
 
 class TemplateHelpers implements ExtensionInterface {
 
