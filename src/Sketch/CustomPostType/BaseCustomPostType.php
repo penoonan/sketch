@@ -2,7 +2,7 @@
 
 namespace Sketch\CustomPostType;
 
-use Sketch\WpApiWrapper;
+use Sketch\Wp\WpApiWrapper;
 use Sketch\Metabox\MetaboxInterface as Metabox;
 
 abstract class BaseCustomPostType implements CustomPostTypeInterface {
