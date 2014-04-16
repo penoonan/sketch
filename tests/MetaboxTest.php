@@ -62,4 +62,14 @@ class MetaboxTest extends PHPUnit_Framework_TestCase {
         $metabox->dispatch('post', 'metabox');
     }
 
+    /**
+     * @expectedException \Sketch\Metabox\SketchInvalidPostTypeException
+     */
+    public function test_call_to_add_throw_exception_if_post_type_not_set()
+    {
+        $wp = m::mock('Sketch\WpApiWrapper');
+        $metabox = new BuzMetabox($wp, $this->dispatcher);
+        $metabox->setPostType(null);
+    }
+
 } 

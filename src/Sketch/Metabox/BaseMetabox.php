@@ -7,6 +7,7 @@ use Sketch\WpApiWrapper;
 
 class SketchMetaboxMissingControllerException extends \Exception {}
 class SketchMetaboxInvalidControllerException extends \InvalidArgumentException {}
+class SketchInvalidPostTypeException extends \InvalidArgumentException {}
 
 class BaseMetabox implements MetaboxInterface {
 
@@ -14,7 +15,6 @@ class BaseMetabox implements MetaboxInterface {
       $id = 'metabox-id',
       $title = 'Metabox',
       $post_type = 'post',
-      $screen = null,
       $context = 'advanced',
       $priority = 'default',
       $callback_args = array(),
@@ -47,7 +47,7 @@ class BaseMetabox implements MetaboxInterface {
           $this->id,
           $this->title,
           array($this, 'dispatch'),
-          $this->screen ?: $this->post_type,
+          $this->post_type,
           $this->context,
           $this->priority,
           $this->callback_args
@@ -69,15 +69,27 @@ class BaseMetabox implements MetaboxInterface {
         $this->dispatcher->dispatch($this->callback_controller, $dispatch_args);
     }
 
-    protected function callbackArgs()
+    /**
+     * @param $post_type
+     * @throws SketchInvalidPostTypeException
+     */
+    public function setPostType($post_type)
     {
-        return count($this->callback_args > 0) ? $this->callback_args : null;
+        if (!$post_type || !is_string($post_type)) {
+            Throw new SketchInvalidPostTypeException('Post type ' . var_dump($post_type) . ' given for Metabox '. get_class($this) . ' is invalid, must be a string.');
+        }
+        $this->post_type = $post_type;
     }
 
+    /**
+     * Make sure the callback controller is set and properly defined
+     * @throws SketchMetaboxInvalidControllerException
+     * @throws SketchMetaboxMissingControllerException
+     */
     private function validate()
     {
         if (!$this->callback_controller) {
-            Throw new SketchMetaboxMissingControllerException('Metabox ' . get_class($this) . ' has no callback controller defined');
+            Throw new SketchMetaboxMissingControllerException('Metabox ' . get_class($this) . ' has no defined $callback_controller');
         }
 
         if (FALSE == strpos($this->callback_controller, '@')) {
