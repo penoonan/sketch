@@ -1,8 +1,7 @@
 <?php
-
 use Sketch\CustomPostType\BaseCustomPostType;
 use Mockery as m;
-
+ini_set('display_errors', -1); error_reporting(E_ALL);
 class CustomPostType extends BaseCustomPostType {}
 class FooPostType extends BaseCustomPostType{
     protected

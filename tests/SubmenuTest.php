@@ -1,6 +1,6 @@
 <?php
 
-use Sketch\WpSubmenuAbstract;
+use Sketch\Menu\WpSubmenuAbstract;
 use Mockery as m;
 
 class BazMenu extends WpSubmenuAbstract {}
@@ -15,8 +15,7 @@ class SubmenuTest extends PHPUnit_Framework_TestCase {
 
     public function setUp()
     {
-//        ini_set('display_errors', -1); error_reporting(E_ALL);
-        $this->wp = m::mock('Sketch\WpApiWrapper');
+        $this->wp = m::mock('Sketch\Wp\WpApiWrapper');
         $this->router = m::mock('Sketch\QueryStringRouter');
         $this->wp->shouldReceive('add_action')->once();
         $this->menu = new BazMenu($this->wp, $this->router);
@@ -24,7 +23,7 @@ class SubmenuTest extends PHPUnit_Framework_TestCase {
 
     public function test_it_can_be_constructed()
     {
-        $this->assertInstanceOf('Sketch\WpBaseMenuAbstract', $this->menu);
+        $this->assertInstanceOf('Sketch\Menu\WpBaseMenuAbstract', $this->menu);
     }
 
     public function test_it_can_add_menu()

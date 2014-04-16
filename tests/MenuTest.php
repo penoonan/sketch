@@ -1,6 +1,6 @@
 <?php
 
-use Sketch\WpMenuAbstract;
+use Sketch\Menu\WpMenuAbstract;
 use Mockery as m;
 
 class FooMenu extends WpMenuAbstract {}
@@ -15,7 +15,7 @@ class MenuTest extends PHPUnit_Framework_TestCase {
 
     public function setUp()
     {
-        $this->wp = m::mock('Sketch\WpApiWrapper');
+        $this->wp = m::mock('Sketch\Wp\WpApiWrapper');
         $this->router = m::mock('Sketch\QueryStringRouter');
         $this->wp->shouldReceive('add_action')->once();
         $this->menu = new FooMenu($this->wp, $this->router);
@@ -23,7 +23,7 @@ class MenuTest extends PHPUnit_Framework_TestCase {
 
     public function test_it_can_be_constructed()
     {
-        $this->assertInstanceOf('Sketch\WpBaseMenuAbstract', $this->menu);
+        $this->assertInstanceOf('Sketch\Menu\WpBaseMenuAbstract', $this->menu);
     }
 
     public function test_it_can_add_menu()

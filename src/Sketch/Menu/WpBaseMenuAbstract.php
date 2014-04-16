@@ -3,6 +3,7 @@
 namespace Sketch\Menu;
 
 use Sketch\Wp\WpApiWrapper as WP;
+use Sketch\RouterInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 abstract class WpBaseMenuAbstract {
