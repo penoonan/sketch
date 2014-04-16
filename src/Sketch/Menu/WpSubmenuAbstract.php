@@ -1,6 +1,6 @@
 <?php
 
-namespace Sketch;
+namespace Sketch\Menu;
 
 abstract class WpSubmenuAbstract extends WpBaseMenuAbstract {
 

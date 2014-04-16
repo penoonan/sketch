@@ -1,6 +1,6 @@
 <?php
 
-namespace Sketch;
+namespace Sketch\Wp;
 
 class WpQueryFactory {
 

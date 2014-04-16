@@ -1,6 +1,6 @@
 <?php
 
-namespace Sketch;
+namespace Sketch\Wp;
 
 /**
  * This class exists to provide a wrapper around wordpress functions

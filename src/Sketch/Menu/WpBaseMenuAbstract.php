@@ -1,6 +1,6 @@
 <?php
 
-namespace Sketch;
+namespace Sketch\Menu;
 
 use ArcWp\ArcWpApiWrapper as WP;
 use Symfony\Component\HttpFoundation\Request;
