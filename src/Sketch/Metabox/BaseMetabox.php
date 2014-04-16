@@ -3,7 +3,7 @@
 namespace Sketch\Metabox;
 
 use Sketch\Dispatcher;
-use Sketch\WpApiWrapper;
+use Sketch\Wp\WpApiWrapper;
 
 class SketchMetaboxMissingControllerException extends \Exception {}
 class SketchMetaboxInvalidControllerException extends \InvalidArgumentException {}

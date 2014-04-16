@@ -2,7 +2,7 @@
 
 namespace Sketch\Menu;
 
-use ArcWp\ArcWpApiWrapper as WP;
+use Sketch\Wp\WpApiWrapper as WP;
 use Symfony\Component\HttpFoundation\Request;
 
 abstract class WpBaseMenuAbstract {
@@ -27,7 +27,7 @@ abstract class WpBaseMenuAbstract {
         $position = null,
         $parent_slug;
 
-    public function __construct(WpApiWrapper $wp, RouterInterface $router)
+    public function __construct(WP $wp, RouterInterface $router)
     {
         $this->wp = $wp;
         $this->router = $router;
