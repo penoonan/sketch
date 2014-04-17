@@ -14,16 +14,6 @@ class Dispatcher {
     private $app;
 
     /**
-     * @var \League\Plates\Template
-     */
-    private $template;
-
-    /**
-     * @var \Symfony\Component\HttpFoundation\Request
-     */
-    private $request;
-
-    /**
      * If you choose to namespace your controllers,
      * pass that namespace in as a parameter to this class
      * in app.php
@@ -35,18 +25,14 @@ class Dispatcher {
 
     /**
      * @param Container $app
-     * @param Template $template
-     * @param Request $request
      * @param null $controller_namespace
      */
-    public function __construct(Container $app, Template $template, Request $request, $controller_namespace = null)
+    public function __construct(Container $app, $controller_namespace = null)
     {
         if ($controller_namespace) {
             $this->controller_namespace = trim($controller_namespace, '\\');
         }
         $this->app = $app;
-        $this->template = $template;
-        $this->request = $request;
     }
 
     public function dispatch($controller, array $args = array())
@@ -63,8 +49,8 @@ class Dispatcher {
     private function controller($class)
     {
         $controller_class = $this->app->make($this->controller_namespace . '\\' . $class);
-        $controller_class->setTemplate($this->template);
-        $controller_class->setRequest($this->request);
+        $controller_class->setTemplate($this->app['template']);
+        $controller_class->setRequest($this->app['request']);
         return $controller_class;
     }
 

@@ -22,13 +22,14 @@ class DispatcherTest extends PHPUnit_Framework_TestCase{
         $this->template = m::mock('League\Plates\Template');
         $this->controller = m::mock('FooController');
         $this->request = m::mock('Symfony\Component\HttpFoundation\Request');
-        $this->dispatcher = new Dispatcher($this->app, $this->template, $this->request);
+        $this->dispatcher = new Dispatcher($this->app);
     }
 
     public function test_it_can_dispatch_a_request()
     {
-//        $request = Request::create('abc.com', 'GET');
         $this->app->shouldReceive('make')->with('\FooController')->once()->andReturn($this->controller);
+        $this->app->shouldReceive('offsetGet')->with('template')->once()->andReturn($this->template);
+        $this->app->shouldReceive('offsetGet')->with('request')->once()->andReturn($this->request);
         $this->controller->shouldReceive('setTemplate')->with($this->template)->once();
         $this->controller->shouldReceive('setRequest')->with($this->request)->once();
         $this->controller->shouldReceive('foo')->once()->andReturn('foo');
