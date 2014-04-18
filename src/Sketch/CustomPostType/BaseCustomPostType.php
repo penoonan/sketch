@@ -5,62 +5,21 @@ namespace Sketch\CustomPostType;
 use Sketch\Wp\WpApiWrapper;
 use Sketch\Metabox\MetaboxInterface as Metabox;
 
+class SketchPostTypeInvalidArgumentException extends \InvalidArgumentException{}
+class SketchPostTypeInvalidLabelKeyException extends \InvalidArgumentException{}
+class SketchPostTypeInvalidRewriteKeyException extends \InvalidArgumentException{}
+
 abstract class BaseCustomPostType implements CustomPostTypeInterface {
 
     protected
         $post_type = "custom_post_type",
-
-        //args
-        $description,
-        $public,
-        $exclude_from_search,
-        $publicly_queryable,
-        $show_ui,
-        $show_in_nav_menus,
-        $show_in_menu,
-        $show_in_admin_bar,
-        $menu_position,
-        $menu_icon,
-        $capability_type,
-        $capabilities,
-        $map_meta_cap,
-        $heirarchical,
-        $supports,
-        $register_meta_box_cb,
-        $taxonomies,
-        $has_archive,
-        $permalink_epmask,
-        $query_var,
-        $can_export,
-        $label,
-        
-        //Labels
-        $labels,
-        $name,
-        $singular_name,
-        $menu_name,
-        $name_admin_bar,
-        $all_items,
-        $add_new,
-        $add_new_item,
-        $edit_item,
-        $new_item,
-        $view_item,
-        $search_items,
-        $not_found,
-        $not_found_in_trash,
-        $parent_item_colon,
-
-        //Rewrite
-        $slug,
-        $with_front,
-        $feeds,
-        $pages,
-        $ep_mask
+        $args = array(),
+        $labels = array(),
+        $rewrite = array()
     ;
     
     private
-        $arg_vals = array(
+        $arg_keys = array(
             'description',
             'public',
             'exclude_from_search',
@@ -83,9 +42,11 @@ abstract class BaseCustomPostType implements CustomPostTypeInterface {
             'query_var',
             'can_export',
             'label',
+            'labels',
+            'rewrite'
         ),
 
-        $label_vals = array(
+        $label_keys = array(
             'name',
             'singular_name',
             'menu_name',
@@ -102,7 +63,7 @@ abstract class BaseCustomPostType implements CustomPostTypeInterface {
             'parent_item_colon'
         ),
 
-        $rewrite_vals = array(
+        $rewrite_keys = array(
             'slug',
             'with_front',
             'feeds',
@@ -132,7 +93,7 @@ abstract class BaseCustomPostType implements CustomPostTypeInterface {
     {
         $metabox->setPostType($this->post_type);
         array_push($this->metaboxes, $metabox);
-        $this->register_meta_box_cb = array($this, 'metaboxCallback');
+        $this->args['register_meta_box_cb'] = array($this, 'metaboxCallback');
 
         return $this;
     }
@@ -147,10 +108,12 @@ abstract class BaseCustomPostType implements CustomPostTypeInterface {
     private function getArgs()
     {
         $args = array();
-        foreach ($this->arg_vals as $arg) {
-            if ($this->{$arg}) {
-                $args[$arg] = $this->{$arg};
+
+        foreach ($this->args as $k => $v) {
+            if (!in_array($k, $this->arg_keys)) {
+                Throw new SketchPostTypeInvalidArgumentException('Specified argument key "'.$k . ' => ' . $v .'" specified in custom post type ' . get_class($this) . ' is not valid. Valid argument keys are: ' . print_r($this->arg_keys) . '.');
             }
+            $args[$k] = $v;
         }
         if ($labels = $this->getLabels()) {
             $args['labels'] = $labels;
@@ -163,24 +126,30 @@ abstract class BaseCustomPostType implements CustomPostTypeInterface {
 
     private function getLabels()
     {
-        $labels = array();
-        foreach ($this->label_vals as $label) {
-            if ($this->{$label}) {
-                $labels[$label] = $this->{$label};
+        $vals = array();
+        foreach ($this->labels as $k => $v) {
+            if (in_array($k, $this->label_keys)) {
+                $vals[$k] = $v;
+            } else {
+                Throw new SketchPostTypeInvalidLabelKeyException('Specified label key "' . $k . '" in post type ' . get_class($this) . ' is not valid. Valid label keys are: ' . print_r($this->label_keys) .'.');
             }
         }
-        return count($labels > 0) ? $labels : null;
+        return count($vals > 0) ? $vals : null;
     }
 
     private function getRewrite()
     {
         $vals = array();
-        foreach ($this->rewrite_vals as $val) {
-            if ($this->{$val}) {
-                $vals[$val] = $this->{$val};
+        foreach ($this->rewrite as $k => $v) {
+            if (in_array($k, $this->rewrite_keys)) {
+                $vals[$k] = $v;
+            } else {
+                Throw new SketchPostTypeInvalidRewriteKeyException('Specified rewrite key "' . $k . '" in post type ' . get_class($this) . ' is not valid. Valid rewrite keys are: ' . print_r($this->label_keys) .'.');
             }
         }
         return count($vals) > 0 ? $vals : null;
     }
+
+
 
 } 

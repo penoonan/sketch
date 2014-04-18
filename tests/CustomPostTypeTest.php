@@ -6,10 +6,17 @@ class CustomPostType extends BaseCustomPostType {}
 class FooPostType extends BaseCustomPostType{
     protected
         $post_type = 'foo',
-        $description = 'foo',
-        $supports = 'foo',
-        $name = 'foo',
-        $slug = 'foo';
+        $args = array(
+            'description' => 'foo',
+            'supports' => 'foo',
+        ),
+        $labels = array(
+            'name' => 'foo'
+        ),
+        $rewrite = array(
+            'slug' => 'foo'
+        );
+
 }
 
 class CustomPostTypeTest extends PHPUnit_Framework_TestCase {
