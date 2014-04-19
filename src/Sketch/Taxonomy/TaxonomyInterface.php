@@ -10,4 +10,5 @@ interface TaxonomyInterface {
     public function add();
     public function metaboxCallback($post, $box);
     public function setMetabox(MetaboxInterface $metabox);
+    public function getName();
 } 

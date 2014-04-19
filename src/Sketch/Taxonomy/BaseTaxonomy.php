@@ -86,6 +86,11 @@ class BaseTaxonomy implements TaxonomyInterface {
         $this->wp->add_action('init', array($this, 'add'));
     }
 
+    public function getName()
+    {
+        return $this->taxonomy;
+    }
+
     public function add()
     {
         $this->validate();
@@ -95,7 +100,7 @@ class BaseTaxonomy implements TaxonomyInterface {
     public function setObjectType($object_type)
     {
         if (!$object_type || !is_string($object_type)) {
-            Throw new SketchTaxonomyInvalidObjectTypeException('Invalid $object_type ('.var_dump($object_type).') passed to taxonomy ' . get_class($this) . '. Object type must be a string.');
+            Throw new SketchTaxonomyInvalidObjectTypeException('Invalid $object_type ('.print_r($object_type, true).') passed to taxonomy ' . get_class($this) . '. Object type must be a string.');
         }
         $object_type = strtolower(str_replace(' ', '_', $object_type));
         $this->object_type = $object_type;
@@ -114,6 +119,7 @@ class BaseTaxonomy implements TaxonomyInterface {
 
     public function setMetabox(MetaboxInterface $metabox)
     {
+        $this->args['meta_box_cb'] = array($this, 'metaboxCallback');
         $this->metabox = $metabox;
         return $this;
     }
@@ -125,20 +131,18 @@ class BaseTaxonomy implements TaxonomyInterface {
         $args = array();
         foreach ($this->args as $k => $v) {
             if (!in_array($k, $this->arg_keys)) {
-                Throw new SketchTaxonomyInvalidArgumentException('Specified argument key "'.$k . ' => ' . $v .'" in taxonomy ' . get_class($this) . ' is not valid. Valid argument keys are: ' . print_r($this->arg_keys) . '.');
-                if ($k === 'meta_box_cb' && $v) {
-                    $args[$k] = array($this, 'metaboxCallback');
-                } elseif ($k === 'update_count_callback' && !$v === '_update_generic_term_count') {
-                    $args[$k] = array($this, 'updateCountCallback');
-                } else {
-                    $args[$k] = $v;
-                }
+                Throw new SketchTaxonomyInvalidArgumentException('Specified argument key "'.$k . ' => ' . $v .'" in taxonomy ' . get_class($this) . ' is not valid. Valid argument keys are: ' . print_r($this->arg_keys, true) . '.');
+            }
+            if ($k === 'update_count_callback' && !$v === '_update_generic_term_count') {
+                $args[$k] = array($this, 'updateCountCallback');
+            } else {
+                $args[$k] = $v;
             }
         }
         if ($labels = $this->getLabels()) {
             $args['labels'] = $labels;
         }
-        if ($rewrite =  $this->getRewrite()) {
+        if ($rewrite = $this->getRewrite()) {
             $args['rewrite'] = $rewrite;
         }
         if ($capabilities = $this->getCapabilities()) {
@@ -154,7 +158,7 @@ class BaseTaxonomy implements TaxonomyInterface {
             if (in_array($k, $this->label_keys)) {
                 $vals[$k] = $v;
             } else {
-                Throw new SketchTaxonomyInvalidLabelException('Specified label key "' . $k . '" in taxonomy ' . get_class($this) . ' is not valid. Valid label keys are: ' . print_r($this->label_keys) .'.');
+                Throw new SketchTaxonomyInvalidLabelException('Specified label key "' . $k . '" in taxonomy ' . get_class($this) . ' is not valid. Valid label keys are: ' . print_r($this->label_keys, true) .'.');
             }
         }
         return count($vals > 0) ? $vals : null;
@@ -167,7 +171,7 @@ class BaseTaxonomy implements TaxonomyInterface {
             if (in_array($k, $this->rewrite_keys)) {
                 $vals[$k] = $v;
             } else {
-                Throw new SketchTaxonomyInvalidRewriteException('Specified rewrite key "' . $k . '" in taxonomy ' . get_class($this) . ' is not valid. Valid rewrite keys are: ' . print_r($this->label_keys) .'.');
+                Throw new SketchTaxonomyInvalidRewriteException('Specified rewrite key "' . $k . '" in taxonomy ' . get_class($this) . ' is not valid. Valid rewrite keys are: ' . print_r($this->label_keys, true) .'.');
             }
         }
         return count($vals) > 0 ? $vals : null;
@@ -180,7 +184,7 @@ class BaseTaxonomy implements TaxonomyInterface {
             if (in_array($k, $this->capability_keys)) {
                 $vals[$k] = $v;
             } else {
-                Throw new SketchTaxonomyInvalidCapabilityException('Specified capability key "' . $k . '" in taxonomy ' . get_class($this) . ' is not valid. Valid capability keys are: ' . print_r($this->label_keys) .'.');
+                Throw new SketchTaxonomyInvalidCapabilityException('Specified capability key "' . $k . '" in taxonomy ' . get_class($this) . ' is not valid. Valid capability keys are: ' . print_r($this->label_keys, true) .'.');
             }
         }
         return count($vals) > 0 ? $vals : null;

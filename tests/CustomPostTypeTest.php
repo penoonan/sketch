@@ -2,28 +2,13 @@
 use Sketch\CustomPostType\BaseCustomPostType;
 use Mockery as m;
 
-class CustomPostType extends BaseCustomPostType {}
-class FooPostType extends BaseCustomPostType{
-    protected
-        $post_type = 'foo',
-        $args = array(
-            'description' => 'foo',
-            'supports' => 'foo',
-        ),
-        $labels = array(
-            'name' => 'foo'
-        ),
-        $rewrite = array(
-            'slug' => 'foo'
-        );
-
-}
-
 class CustomPostTypeTest extends PHPUnit_Framework_TestCase {
 
     protected $post_type;
 
     protected $metabox;
+
+    protected $taxonomy;
 
     protected $wp;
 
@@ -59,4 +44,42 @@ class CustomPostTypeTest extends PHPUnit_Framework_TestCase {
         $this->post_type->register();
         $this->post_type->metaboxCallback('post');
     }
+
+    public function test_it_can_add_a_taxonomy()
+    {
+        $taxonomy = m::mock('\Sketch\Taxonomy\TaxonomyInterface');
+        $taxonomy->shouldReceive('getName')->once()->andReturn('foo');
+        $this->wp->shouldReceive('register_post_type')->with('custom_post_type', array('taxonomies' => array('foo')));
+        $this->post_type->addTaxonomy($taxonomy);
+        $this->post_type->register();
+    }
+
+    public function test_it_can_add_multiple_taxonomies()
+    {
+        $taxonomy = m::mock('\Sketch\Taxonomy\TaxonomyInterface');
+        $taxonomy->shouldReceive('getName')->once()->andReturn('foo');
+        $taxonomy2 = m::mock('\Sketch\Taxonomy\TaxonomyInterface');
+        $taxonomy2->shouldReceive('getName')->once()->andReturn('bar');
+        $this->wp->shouldReceive('register_post_type')->with('custom_post_type', array('taxonomies' => array('foo', 'bar')));
+        $this->post_type
+            ->addTaxonomy($taxonomy)
+            ->addTaxonomy($taxonomy2)
+            ->register();
+    }
+}
+
+class CustomPostType extends BaseCustomPostType {}
+class FooPostType extends BaseCustomPostType{
+    protected
+      $post_type = 'foo',
+      $args = array(
+      'description' => 'foo',
+      'supports' => 'foo',
+    ),
+      $labels = array(
+      'name' => 'foo'
+    ),
+      $rewrite = array(
+      'slug' => 'foo'
+    );
 }

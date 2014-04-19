@@ -4,6 +4,7 @@ namespace Sketch\CustomPostType;
 
 use Sketch\Wp\WpApiWrapper;
 use Sketch\Metabox\MetaboxInterface as Metabox;
+use Sketch\Taxonomy\TaxonomyInterface as Taxonomy;
 
 class SketchPostTypeInvalidArgumentException extends \InvalidArgumentException{}
 class SketchPostTypeInvalidLabelKeyException extends \InvalidArgumentException{}
@@ -89,6 +90,17 @@ abstract class BaseCustomPostType implements CustomPostTypeInterface {
         $this->wp->register_post_type($this->post_type, $this->getArgs());
     }
 
+    public function addTaxonomy(Taxonomy $taxonomy)
+    {
+        if (isset($this->args['taxonomies'])) {
+            array_push($this->args['taxonomies'], $taxonomy->getName());
+        } else {
+            $this->args['taxonomies'] = array($taxonomy->getName());
+        }
+
+        return $this;
+    }
+
     public function addMetabox(Metabox $metabox)
     {
         $metabox->setPostType($this->post_type);
@@ -112,8 +124,9 @@ abstract class BaseCustomPostType implements CustomPostTypeInterface {
         foreach ($this->args as $k => $v) {
             if (!in_array($k, $this->arg_keys)) {
                 Throw new SketchPostTypeInvalidArgumentException('Specified argument key "'.$k . ' => ' . $v .'" specified in custom post type ' . get_class($this) . ' is not valid. Valid argument keys are: ' . print_r($this->arg_keys) . '.');
+            } else {
+                $args[$k] = $v;
             }
-            $args[$k] = $v;
         }
         if ($labels = $this->getLabels()) {
             $args['labels'] = $labels;
