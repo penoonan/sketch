@@ -97,7 +97,7 @@ abstract class BaseCustomPostType implements CustomPostTypeInterface {
         } else {
             $this->args['taxonomies'] = array($taxonomy->getName());
         }
-
+        $taxonomy->setObjectType($this->post_type);
         return $this;
     }
 
