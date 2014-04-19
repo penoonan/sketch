@@ -97,13 +97,21 @@ class BaseTaxonomy implements TaxonomyInterface {
         $this->wp->register_taxonomy($this->taxonomy, $this->object_type, $this->getArgs());
     }
 
-    public function setObjectType($object_type)
+    public function addObjectType($object_type)
     {
         if (!$object_type || !is_string($object_type)) {
-            Throw new SketchTaxonomyInvalidObjectTypeException('Invalid $object_type ('.print_r($object_type, true).') passed to taxonomy ' . get_class($this) . '. Object type must be a string.');
+            Throw new SketchTaxonomyInvalidObjectTypeException('Invalid $object_type ('.print_r($object_type, true).') passed to taxonomy ' . get_class($this) . '. Object type must be a string or array.');
         }
+
         $object_type = strtolower(str_replace(' ', '_', $object_type));
-        $this->object_type = $object_type;
+
+        if (is_array($this->object_type)) {
+            array_push($this->object_type, $object_type);
+        } elseif (is_string($this->object_type)) {
+            $this->object_type = array($this->object_type, $object_type);
+        } else {
+            $this->object_type = $object_type;
+        }
     }
 
     public function metaboxCallback($post, $box)

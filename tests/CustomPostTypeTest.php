@@ -49,7 +49,7 @@ class CustomPostTypeTest extends PHPUnit_Framework_TestCase {
     {
         $taxonomy = m::mock('\Sketch\Taxonomy\TaxonomyInterface');
         $taxonomy->shouldReceive('getName')->once()->andReturn('foo');
-        $taxonomy->shouldReceive('setObjectType')->once();
+        $taxonomy->shouldReceive('addObjectType')->once();
         $this->wp->shouldReceive('register_post_type')->with('custom_post_type', array('taxonomies' => array('foo')));
         $this->post_type->addTaxonomy($taxonomy);
         $this->post_type->register();
@@ -59,10 +59,10 @@ class CustomPostTypeTest extends PHPUnit_Framework_TestCase {
     {
         $taxonomy = m::mock('\Sketch\Taxonomy\TaxonomyInterface');
         $taxonomy->shouldReceive('getName')->once()->andReturn('foo');
-        $taxonomy->shouldReceive('setObjectType')->once();
+        $taxonomy->shouldReceive('addObjectType')->once();
         $taxonomy2 = m::mock('\Sketch\Taxonomy\TaxonomyInterface');
         $taxonomy2->shouldReceive('getName')->once()->andReturn('bar');
-        $taxonomy2->shouldReceive('setObjectType')->once();
+        $taxonomy2->shouldReceive('addObjectType')->once();
         $this->wp->shouldReceive('register_post_type')->with('custom_post_type', array('taxonomies' => array('foo', 'bar')));
         $this->post_type
             ->addTaxonomy($taxonomy)

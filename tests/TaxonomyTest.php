@@ -62,7 +62,17 @@ class TaxonomyTest extends PHPUnit_Framework_TestCase {
     public function test_it_throws_exception_if_invalid_object_type_given()
     {
         $tax = new FooTaxonomy($this->getWpWrapper());
-        $tax->setObjectType(array());
+        $tax->addObjectType(array());
+    }
+
+    public function test_it_can_add_multiple_object_types()
+    {
+        $wp = $this->getWpWrapper();
+        $wp->shouldReceive('register_taxonomy')->with('fine', array('foo', 'bar'), null);
+        $tax = new FineTaxonomy($wp);
+        $tax->addObjectType('foo');
+        $tax->addObjectType('bar');
+        $tax->add();
     }
 
     public function test_it_can_add_metabox()
