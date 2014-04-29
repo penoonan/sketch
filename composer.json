@@ -19,7 +19,7 @@
     "require": {
         "php": ">=5.4.0",
         "symfony/http-foundation": "2.3.*@dev",
-        "illuminate/container": "4.1.*@dev",
+        "illuminate/container": "4.1.*@stable",
         "league/plates": "dev-master",
         "vlucas/valitron": "dev-master"
     },
