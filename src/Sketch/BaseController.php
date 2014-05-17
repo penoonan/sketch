@@ -2,7 +2,7 @@
 
 namespace Sketch;
 
-use League\Plates\Template;
+use Sketch\TemplateInterface as Template;
 use Symfony\Component\HttpFoundation\Request;
 
 class WpControllerException extends \Exception {}
@@ -45,10 +45,10 @@ class BaseController {
     protected function getPageVars()
     {
         $vars = array(
-            'message' => $this->message,
-            'nonce_name' => $this->nonce_name,
-            'nonce_action' => $this->nonce_action,
-            'errors' => $this->errors
+          'message' => $this->message,
+          'nonce_name' => $this->nonce_name,
+          'nonce_action' => $this->nonce_action,
+          'errors' => $this->errors
         );
 
         return array_merge($vars, $this->page_vars);
