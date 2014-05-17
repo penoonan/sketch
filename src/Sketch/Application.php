@@ -28,6 +28,15 @@ class Application extends Container {
 
     public function register(ServiceProviderInterface $provider)
     {
+        $this->providers[] = $provider;
+        $provider->register($this);
+    }
 
+    public function boot()
+    {
+        foreach($this->providers as $provider)
+        {
+            $provider->boot($this);
+        }
     }
 }
