@@ -12,7 +12,7 @@ class Application extends Container {
         $app = $this;
 
         $app->instance('request', Request::createFromGlobals());
-        $app->instance('Illuminate\Container\Container', $app);
+        $app->instance('Sketch\Application', $app);
 
         $app['router'] = $app->share(function() use ($app) {
               return new \Sketch\QueryStringRouter (

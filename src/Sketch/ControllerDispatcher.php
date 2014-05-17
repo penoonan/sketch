@@ -2,7 +2,7 @@
 
 namespace Sketch;
 
-use Illuminate\Container\Container;
+use Sketch\Application;
 use League\Plates\Template;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -24,10 +24,10 @@ class ControllerDispatcher {
     protected $args = array();
 
     /**
-     * @param Container $app
+     * @param Application $app
      * @param null $controller_namespace
      */
-    public function __construct(Container $app, $controller_namespace = null)
+    public function __construct(Application $app, $controller_namespace = null)
     {
         if ($controller_namespace) {
             $this->controller_namespace = trim($controller_namespace, '\\');

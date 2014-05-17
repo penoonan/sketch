@@ -18,7 +18,7 @@ class DispatcherTest extends PHPUnit_Framework_TestCase{
     public function setUp()
     {
         ini_set('display_errors', -1); error_reporting(E_ALL);
-        $this->app = m::mock('Illuminate\Container\Container');
+        $this->app = m::mock('Sketch\Application');
         $this->template = m::mock('League\Plates\Template');
         $this->controller = m::mock('FooController');
         $this->request = m::mock('Symfony\Component\HttpFoundation\Request');
