@@ -1,6 +1,6 @@
 <?php
 
-use Sketch\Dispatcher;
+use Sketch\ControllerDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Mockery as m;
 
@@ -22,7 +22,7 @@ class DispatcherTest extends PHPUnit_Framework_TestCase{
         $this->template = m::mock('League\Plates\Template');
         $this->controller = m::mock('FooController');
         $this->request = m::mock('Symfony\Component\HttpFoundation\Request');
-        $this->dispatcher = new Dispatcher($this->app);
+        $this->dispatcher = new ControllerDispatcher($this->app);
     }
 
     public function test_it_can_dispatch_a_request()

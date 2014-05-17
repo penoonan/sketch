@@ -20,7 +20,7 @@ class PlatesServiceProvider implements ServiceProviderInterface {
 
         $engine->loadExtension($app->make('Sketch\TemplateHelpers'));
 
-        $view_folders = glob( $app['template.dir'] . '/*' , GLOB_ONLYDIR );
+        $view_folders = glob( $values['template.dir'] . '/*' , GLOB_ONLYDIR );
 
         foreach ($view_folders as $folder) {
             $engine->addFolder(basename($folder), $folder);

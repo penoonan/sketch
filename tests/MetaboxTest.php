@@ -17,7 +17,7 @@ class MetaboxTest extends PHPUnit_Framework_TestCase {
 
     public function setUp()
     {
-        $this->dispatcher = m::mock('Sketch\Dispatcher');
+        $this->dispatcher = m::mock('Sketch\ControllerDispatcher');
         $this->wp = $this->get_a_wrapper();
         $this->metabox = new FooMetabox($this->wp, $this->dispatcher);
     }

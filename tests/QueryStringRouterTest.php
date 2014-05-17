@@ -13,7 +13,7 @@ class QueryStringRouterTest extends PHPUnit_Framework_TestCase {
     public function setUp()
     {
         $this->request = m::mock('Symfony\Component\HttpFoundation\Request');
-        $this->dispatcher = m::mock('Sketch\Dispatcher');
+        $this->dispatcher = m::mock('Sketch\ControllerDispatcher');
         $this->router = new Router($this->dispatcher, $this->request);
     }
 

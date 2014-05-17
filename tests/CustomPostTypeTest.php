@@ -36,7 +36,7 @@ class CustomPostTypeTest extends PHPUnit_Framework_TestCase {
 
     public function test_it_can_add_a_metabox()
     {
-        $this->metabox = m::mock('Sketch\Metabox\CustomPostMetaboxInterface');
+        $this->metabox = m::mock('Sketch\Metabox\MetaboxInterface');
         $this->metabox->shouldReceive('setPostType')->with('custom_post_type')->once();
         $this->wp->shouldReceive('register_post_type')->with('custom_post_type', array('register_meta_box_cb' => array($this->post_type, 'metaboxCallback')));
         $this->metabox->shouldReceive('add')->with('post')->once();
