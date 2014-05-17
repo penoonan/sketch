@@ -6,7 +6,7 @@ use Illuminate\Container\Container;
 use League\Plates\Template;
 use Symfony\Component\HttpFoundation\Request;
 
-class Dispatcher {
+class ControllerDispatcher {
 
     /**
      * @var \Illuminate\Container\Container
