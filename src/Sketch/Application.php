@@ -7,13 +7,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class Application extends Container {
 
-    /**
-     * All registered service providers
-     *
-     * @var array
-     */
-    protected $providers = array();
-
     public function __construct(array $values = array())
     {
         $app = $this;
@@ -45,12 +38,6 @@ class Application extends Container {
      */
     public function register(ServiceProviderInterface $provider, array $options = array())
     {
-        $this->providers[] = $provider;
-
-        foreach ($options as $k => $v) {
-            $this[$k] = $v;
-        }
-
         $provider->register($this, $options);
     }
 
