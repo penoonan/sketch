@@ -2,7 +2,7 @@
 
 namespace Sketch\Metabox;
 
-use Sketch\Dispatcher;
+use Sketch\ControllerDispatcher;
 use Sketch\Wp\WpApiWrapper;
 
 class SketchMetaboxMissingControllerException extends \Exception {}
@@ -32,9 +32,9 @@ class BaseMetabox implements MetaboxInterface {
 
     /**
      * @param WpApiWrapper $wp
-     * @param Dispatcher $dispatcher
+     * @param ControllerDispatcher $dispatcher
      */
-    public function __construct(WpApiWrapper $wp, Dispatcher $dispatcher)
+    public function __construct(WpApiWrapper $wp, ControllerDispatcher $dispatcher)
     {
         $this->dispatcher = $dispatcher;
         $this->wp = $wp;

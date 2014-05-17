@@ -3,6 +3,7 @@
 namespace Sketch;
 
 use Illuminate\Container\Container;
+use Symfony\Component\HttpFoundation\Request;
 
 class Application extends Container {
 
@@ -13,17 +14,25 @@ class Application extends Container {
      */
     protected $providers = array();
 
-    public function __construct()
+    public function __construct(array $values = array())
     {
-        $this->instance('request', Request::createFromGlobals());
-        $this->instance('Illuminate\Container\Container', $this);
+        $app = $this;
 
-        $this['router'] = $this->share(function() use ($this) {
-            return new \Sketch\QueryStringRouter (
-                $this->make('Sketch\Dispatcher'),
-                $this['request']
-            );
-        });
+        $app->instance('request', Request::createFromGlobals());
+        $app->instance('Illuminate\Container\Container', $app);
+
+        $app['router'] = $app->share(function() use ($app) {
+              return new \Sketch\QueryStringRouter (
+                $app->make('Sketch\ControllerDispatcher'),
+                $app['request']
+              );
+          });
+
+        $app->bind('Sketch\RouterInterface', function() use($app) {return $app['router'];});
+
+        foreach ($values as $k => $v) {
+            $app[$k] = $v;
+        }
     }
 
     /**
@@ -42,7 +51,7 @@ class Application extends Container {
             $this[$k] = $v;
         }
 
-        $provider->register($this);
+        $provider->register($this, $options);
     }
 
 }

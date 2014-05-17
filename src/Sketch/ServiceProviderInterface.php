@@ -4,6 +4,11 @@ namespace Sketch;
 
 interface ServiceProviderInterface {
 
-    public function register(Application $app);
+    /**
+     * @param \Sketch\Application $app
+     * @param array $values
+     * @return mixed
+     */
+    public function register(Application $app, array $values);
 
 }
