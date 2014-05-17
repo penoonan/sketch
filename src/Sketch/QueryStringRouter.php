@@ -7,8 +7,9 @@ use Symfony\Component\HttpFoundation\Request;
 class QueryStringRouter implements RouterInterface {
 
     public $routes = array();
+
     /**
-     * @var Dispatcher
+     * @var ControllerDispatcher
      */
     protected $dispatcher;
 
@@ -17,7 +18,7 @@ class QueryStringRouter implements RouterInterface {
      */
     protected $request;
 
-    public function __construct(Dispatcher $dispatcher, Request $request)
+    public function __construct(ControllerDispatcher $dispatcher, Request $request)
     {
         $this->dispatcher = $dispatcher;
         $this->request = $request;
@@ -83,7 +84,7 @@ class QueryStringRouter implements RouterInterface {
     {
         return $this->dispatcher->dispatch($controller);
     }
-    
+
     protected function matches($request_params, $route_param_name, $route_param_value)
     {
         if (!isset($request_params[$route_param_name])) return false;
@@ -93,12 +94,6 @@ class QueryStringRouter implements RouterInterface {
         if ($route_param_value === '{int}' && ctype_digit($request_value)) return true;
 
         return $request_value === $route_param_value;
-    }
-
-    protected function convertParamStringToArray($params)
-    {
-        $params = ltrim($params, '?');
-        $param_array = explode('&', ltrim($params, '?'));
     }
 
     protected function formatScript($script)
