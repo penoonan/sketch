@@ -4,7 +4,7 @@ use Sketch\ControllerDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Mockery as m;
 
-class FooController{}
+class FooController extends \Sketch\BaseController{}
 
 class DispatcherTest extends PHPUnit_Framework_TestCase{
 
@@ -19,7 +19,7 @@ class DispatcherTest extends PHPUnit_Framework_TestCase{
     {
         ini_set('display_errors', -1); error_reporting(E_ALL);
         $this->app = m::mock('Sketch\Application');
-        $this->template = m::mock('League\Plates\Template');
+        $this->template = m::mock('Sketch\PlatesTemplateAdapter');
         $this->controller = m::mock('FooController');
         $this->request = m::mock('Symfony\Component\HttpFoundation\Request');
         $this->dispatcher = new ControllerDispatcher($this->app);
