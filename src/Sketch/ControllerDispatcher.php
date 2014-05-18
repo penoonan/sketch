@@ -9,11 +9,6 @@ use Symfony\Component\HttpFoundation\Request;
 class ControllerDispatcher {
 
     /**
-     * @var \Illuminate\Container\Container
-     */
-    private $app;
-
-    /**
      * @var ControllerFactoryInterface
      */
     private $controller_factory;
@@ -25,8 +20,6 @@ class ControllerDispatcher {
      * @var string
      */
     private $controller_namespace;
-
-    protected $args = array();
 
     /**
      * @param ControllerFactoryInterface $controller_factory
@@ -50,14 +43,6 @@ class ControllerDispatcher {
         $resolved_controller = $this->controller_factory->make($class);
 
         return call_user_func_array(array($resolved_controller, $method), $args);
-    }
-
-    private function controller($class)
-    {
-        $controller_class = $this->app->make($this->controller_namespace . '\\' . $class);
-        $controller_class->setTemplate($this->app['template']);
-        $controller_class->setRequest($this->app['request']);
-        return $controller_class;
     }
 
 }
