@@ -14,6 +14,11 @@ class ControllerDispatcher {
     private $app;
 
     /**
+     * @var ControllerFactoryInterface
+     */
+    private $controller_factory;
+
+    /**
      * If you choose to namespace your controllers,
      * pass that namespace in as a parameter to this class
      * in app.php
@@ -24,15 +29,15 @@ class ControllerDispatcher {
     protected $args = array();
 
     /**
-     * @param Application $app
+     * @param ControllerFactoryInterface $controller_factory
      * @param null $controller_namespace
      */
-    public function __construct(Application $app, $controller_namespace = null)
+    public function __construct(ControllerFactoryInterface $controller_factory, $controller_namespace = null)
     {
         if ($controller_namespace) {
             $this->controller_namespace = trim($controller_namespace, '\\');
         }
-        $this->app = $app;
+        $this->controller_factory = $controller_factory;
     }
 
     public function dispatch($controller, array $args = array())
@@ -42,8 +47,9 @@ class ControllerDispatcher {
         }
 
         list($class, $method) = explode('@', $controller);
-        $class = ucwords($class) . 'Controller';
-        return call_user_func_array(array($this->controller($class), $method), $args);
+        $resolved_controller = $this->controller_factory->make($class);
+
+        return call_user_func_array(array($resolved_controller, $method), $args);
     }
 
     private function controller($class)

@@ -4,37 +4,27 @@ use Sketch\ControllerDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Mockery as m;
 
-class FooController extends \Sketch\BaseController{}
-
 class DispatcherTest extends PHPUnit_Framework_TestCase{
 
     protected $dispatcher;
-
-    protected $app;
+    protected $controller_factory;
     protected $template;
     protected $controller;
     protected $request;
 
     public function setUp()
     {
-        ini_set('display_errors', -1); error_reporting(E_ALL);
-        $this->app = m::mock('Sketch\Application');
-        $this->template = m::mock('Sketch\PlatesTemplateAdapter');
+        $this->controller_factory = m::mock('Sketch\ControllerFactoryInterface');
         $this->controller = m::mock('FooController');
-        $this->request = m::mock('Symfony\Component\HttpFoundation\Request');
-        $this->dispatcher = new ControllerDispatcher($this->app);
+        $this->dispatcher = new ControllerDispatcher($this->controller_factory);
     }
 
     public function test_it_can_dispatch_a_request()
     {
-        $this->app->shouldReceive('make')->with('\FooController')->once()->andReturn($this->controller);
-        $this->app->shouldReceive('offsetGet')->with('template')->once()->andReturn($this->template);
-        $this->app->shouldReceive('offsetGet')->with('request')->once()->andReturn($this->request);
-        $this->controller->shouldReceive('setTemplate')->with($this->template)->once();
-        $this->controller->shouldReceive('setRequest')->with($this->request)->once();
+        $this->controller_factory->shouldReceive('make')->once()->with('FooController')->andReturn($this->controller);
         $this->controller->shouldReceive('foo')->once()->andReturn('foo');
 
-        $result = $this->dispatcher->dispatch('foo@foo');
+        $result = $this->dispatcher->dispatch('FooController@foo');
 
         $this->assertSame($result, 'foo');
     }
@@ -52,14 +42,14 @@ class DispatcherTest extends PHPUnit_Framework_TestCase{
 
     public function test_it_can_dispatch_a_callback_using_use()
     {
-        $request = Request::create('abc.com', 'GET');
-        $callback = function() use($request) {
-            return $request->getMethod();
+        $foo = 'bar';
+        $callback = function() use($foo) {
+            return $foo;
         };
 
         $result = $this->dispatcher->dispatch($callback);
 
-        $this->assertSame($result, 'GET');
+        $this->assertSame($result, 'bar');
     }
 
 } 

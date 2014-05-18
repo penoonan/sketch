@@ -14,8 +14,17 @@ class Application extends Container {
         $app->instance('request', Request::createFromGlobals());
         $app->instance('Sketch\Application', $app);
 
+        $app->bind('Sketch\ControllerDispatcher', $app->share(function() use ($app) {
+            return new ControllerDispatcher(
+                $app['controller_factory'],
+                $app['controller_namespace']
+            );
+        }));
+
+        $app['controller_namespace'] = null;
+
         $app['router'] = $app->share(function() use ($app) {
-              return new \Sketch\QueryStringRouter (
+              return new QueryStringRouter (
                 $app->make('Sketch\ControllerDispatcher'),
                 $app['request']
               );
