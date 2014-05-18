@@ -21,7 +21,7 @@ class DispatcherTest extends PHPUnit_Framework_TestCase{
 
     public function test_it_can_dispatch_a_request()
     {
-        $this->controller_factory->shouldReceive('make')->once()->with('FooController')->andReturn($this->controller);
+        $this->controller_factory->shouldReceive('make')->once()->with('\FooController')->andReturn($this->controller);
         $this->controller->shouldReceive('foo')->once()->andReturn('foo');
 
         $result = $this->dispatcher->dispatch('FooController@foo');
