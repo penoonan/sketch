@@ -40,7 +40,7 @@ class ControllerDispatcher {
         }
 
         list($class, $method) = explode('@', $controller);
-        $resolved_controller = $this->controller_factory->make($class);
+        $resolved_controller = $this->controller_factory->make($this->controller_namespace . '\\' . $class);
 
         return call_user_func_array(array($resolved_controller, $method), $args);
     }
