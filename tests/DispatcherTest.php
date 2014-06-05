@@ -1,7 +1,6 @@
 <?php
 
 use Sketch\ControllerDispatcher;
-use Symfony\Component\HttpFoundation\Request;
 use Mockery as m;
 
 class DispatcherTest extends PHPUnit_Framework_TestCase{

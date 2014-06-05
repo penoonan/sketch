@@ -5,7 +5,7 @@ namespace Sketch;
 use Sketch\TemplateInterface as Template;
 use Symfony\Component\HttpFoundation\Request;
 
-class WpControllerException extends \Exception {}
+class ControllerException extends \Exception {}
 
 class BaseController {
 
