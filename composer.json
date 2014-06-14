@@ -21,7 +21,7 @@
         "symfony/http-foundation": "2.3.*@dev",
         "illuminate/container": "4.1.*@stable",
         "league/plates": "2.*",
-        "vlucas/valitron": "dev-master"
+        "vlucas/valitron": "1.1.7"
     },
     "require-dev": {
         "phpunit/phpunit": "4.0.*",
